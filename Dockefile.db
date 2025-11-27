@@ -1,0 +1,13 @@
+# Imagen base de Postgres 15
+FROM postgres:15
+
+# Variables de entorno para inicializar la BD
+ENV POSTGRES_DB=isw_db
+ENV POSTGRES_USER=root
+ENV POSTGRES_PASSWORD=666
+
+# Exponer el puerto interno de Postgres
+EXPOSE 5432
+
+# Persistencia del directorio de datos
+VOLUME ["/var/lib/postgresql/data"]
