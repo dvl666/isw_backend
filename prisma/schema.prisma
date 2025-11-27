@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://root:666@db:5432/isw_db"
+  url      = "postgresql://root:666@isw_backend_dev_db:5432/isw_db"
 }
 
 model User {
