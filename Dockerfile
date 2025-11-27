@@ -1,0 +1,38 @@
+# STAGE 1: DEPENDENCIES
+FROM node:20 AS deps
+
+WORKDIR /app
+
+COPY package*.json ./
+COPY prisma ./prisma
+
+RUN npm install
+RUN npx prisma generate
+
+# STAGE 2: BUILD
+FROM node:20 AS builder
+
+WORKDIR /app
+
+COPY . .
+COPY --from=deps /app/node_modules ./node_modules
+
+RUN npm run build
+
+# STAGE 3: PRODUCTION
+FROM node:20 AS prod
+
+WORKDIR /app
+
+# Copiar solo lo necesario
+COPY package*.json ./
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY prisma ./prisma
+
+ENV NODE_ENV=production
+ENV PORT=3000
+
+EXPOSE 3000
+
+CMD ["node", "dist/main.js"]
